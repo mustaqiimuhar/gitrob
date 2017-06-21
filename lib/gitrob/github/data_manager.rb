@@ -108,6 +108,7 @@ module Gitrob
 
       def incrementCounter
         if @method_counter == 1000
+          puts "Job paused for 30 Minutes. Max Github request reached."
           sleep 1800
           @method_counter = 0
         end
