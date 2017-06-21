@@ -23,7 +23,7 @@ module Gitrob
           @owners << owner
           @repositories_for_owners[owner["login"]] = []
           next unless owner["type"] == "Organization"
-          #disable scanning of members in Organization
+          #Zendesk - disable scanning of members in Organization
           # get_members(owner, thread_pool) if owner["type"] == "Organization"
         end
         @owners = @owners.uniq { |o| o["login"] }
@@ -106,6 +106,7 @@ module Gitrob
         end
       end
 
+      #Zendesk - Counter so as we won't hit Github Rate Limit
       def incrementCounter
         if @method_counter == 1000
           puts "Job paused for 30 Minutes. Max Github request reached."
