@@ -111,8 +111,8 @@ module Gitrob
       #Zendesk - Counter so as we won't hit Github Rate Limit
       def incrementCounter
         if @method_counter == 1000
-          puts "Job paused for 30 Minutes. Max Github request reached."
-          sleep 1800
+          puts "Job paused for 1 Hour. Max Github request reached."
+          sleep 3600
           @method_counter = 0
         end
         @method_counter += 1
