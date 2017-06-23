@@ -17,14 +17,16 @@ module Gitrob
         @mutex                   = Mutex.new
       end
 
-      def gather_owners(thread_pool)
+      def gather_owners(thread_pool, scan_member)
         @logins.each do |login|
           next unless owner = get_owner(login)
           @owners << owner
           @repositories_for_owners[owner["login"]] = []
           next unless owner["type"] == "Organization"
           #Zendesk - disable scanning of members in Organization
-          # get_members(owner, thread_pool) if owner["type"] == "Organization"
+          if scan_member
+            get_members(owner, thread_pool) if owner["type"] == "Organization"
+          end
         end
         @owners = @owners.uniq { |o| o["login"] }
       end
