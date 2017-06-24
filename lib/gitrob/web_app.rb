@@ -1,4 +1,5 @@
 require "sinatra/base"
+require "warden"
 require "thin"
 
 module Gitrob
@@ -16,6 +17,42 @@ module Gitrob
     set :public_folder, proc { File.join(root, "public") }
     set :views, proc { File.join(root, "views") }
     set :run, proc { false }
+
+    # Warden configuration code
+    use Warden::Manager do |config|
+      config.serialize_into_session{|user| user.id}
+      config.serialize_from_session{|id| User.get(id)}
+
+      config.scope_defaults :default,
+        strategies: [:password],
+        action: 'auth/unathenticated'
+      config.failure_app = self
+    end
+
+    Warden::Manager.before_failure do |env,opts|
+      env['REQUEST_METHOD'] = 'POST'
+      env.each do |key, value|
+        env[key]['_method'] = 'post' if key == 'rack.request.form_hash'
+      end
+    end
+
+    Warden::Strategies.add(:password) do
+      def valid?
+        params['user'] && params['user']['username'] && params['user']['password']
+      end
+
+      def authenticate!
+        user = User.first(username: params['user']['username'])
+
+        if user.nil?
+          throw(:warden,message: "The username and passowrd combination balblabla.")
+        elseif user.authenticate(params['user']['password'])
+          success!(user)
+        else
+          throw(:warden,message: "The username and password combination ")
+        end
+      end
+    end
 
     helpers do
       HUMAN_PREFIXES = %w(TB GB MB KB B).freeze
