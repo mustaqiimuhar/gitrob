@@ -1,6 +1,6 @@
 require "sinatra/base"
 require "warden"
-require "thin"
+require 'sinatra/flash'
 
 module Gitrob
   class WebApp < Sinatra::Base
@@ -19,13 +19,16 @@ module Gitrob
     set :run, proc { false }
 
     # Warden configuration code
+    enable :sessions
+    register Sinatra::Flash
+
     use Warden::Manager do |config|
       config.serialize_into_session{|user| user.id}
-      config.serialize_from_session{|id| User.get(id)}
+      config.serialize_from_session{|id| Gitrob::Models::GitrobUser.get(id)}
 
       config.scope_defaults :default,
         strategies: [:password],
-        action: 'auth/unathenticated'
+        action: '/auth/unathenticated'
       config.failure_app = self
     end
 
@@ -42,14 +45,13 @@ module Gitrob
       end
 
       def authenticate!
-        user = User.first(username: params['user']['username'])
-
+        user = Gitrob::Models::GitrobUser.first(username: params['user']['username'])
         if user.nil?
-          throw(:warden,message: "The username and passowrd combination balblabla.")
-        elseif user.authenticate(params['user']['password'])
+          throw(:warden, :message => "The username and passowrd combination is incorrect.")
+        elsif user.authenticate(params['user']['password'])
           success!(user)
         else
-          throw(:warden,message: "The username and password combination ")
+          throw(:warden, :message => "The username and password combination ")
         end
       end
     end
@@ -138,6 +140,41 @@ module Gitrob
         .order(:created_at)
         .reverse.all
       erb :index
+    end
+
+    get '/auth/login' do
+      erb :"assessments/login"
+    end
+
+    post '/auth/login' do
+      env['warden'].authenticate!
+      flash[:success] = "Successfully logged in"
+      if session[:return_to].nil?
+        redirect '/'
+      else
+        redirect session[:return_to]
+      end
+    end
+
+    get '/auth/logout' do
+      env['warden'].raw_session.inspect
+      env['warden'].logout
+      flash[:success] = 'Successfully logged out'
+      redirect '/auth/login'
+    end
+
+    post '/auth/unathenticated' do
+      session[:return_to] = env['warden.options'][:attempted_path] if session[:return_to].nil?
+
+      # Set the error and use a fallback if the message is not defined
+      flash[:error] = env['warden'].message || "You must log in"
+      redirect '/auth/login'
+    end
+
+    get '/auth/protected' do
+      env['warden'].authenticate!
+
+      erb :"/auth/protected"
     end
 
     get "/assessments/_table" do

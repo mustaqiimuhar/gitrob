@@ -63,6 +63,16 @@ $(document).ready(function() {
     return false;
   });
 
+  $("#new_login_form").on("submit", function (e) {
+    e.preventDefault();
+    $.ajax({
+      url: "/auth/login",
+      type: "POST",
+      data: $(this).serialize()
+    });
+    return false;
+  });
+
   $(".blob-link").on("click", function(e) {
     e.preventDefault();
     $("#blob_modal").modal({

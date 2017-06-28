@@ -15,6 +15,18 @@
     <![endif]-->
   </head>
   <body>
+    <p><a href="/auth/login">Log In</a> | <a href="/auth/protected">Protected Page</a> | <a href="/auth/logout">Log Out</a></p>
+    <% if flash[:success] %>
+    <div style="color:green;">
+      <%= flash[:success] %>
+    </div>
+    <% end %>
+
+    <% if flash[:error] %>
+    <div style="color:red;">
+      <%= flash[:error] %>
+    </div>
+    <% end %>
     <nav class="navbar navbar-default">
       <div class="container-fluid">
         <div class="navbar-header">

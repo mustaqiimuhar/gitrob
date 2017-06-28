@@ -150,6 +150,7 @@ module Gitrob
         require "gitrob/models/flag"
         require "gitrob/models/comparison"
         require "gitrob/models/fingerprint"
+        require "gitrob/models/gitrob_user"
       end
     end
 
