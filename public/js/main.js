@@ -68,7 +68,10 @@ $(document).ready(function() {
     $.ajax({
       url: "/auth/login",
       type: "POST",
-      data: $(this).serialize()
+      data: $(this).serialize(),
+      success: function(data) {
+        window.location = "/";
+      }
     });
     return false;
   });

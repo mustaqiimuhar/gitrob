@@ -54,7 +54,6 @@ module Gitrob
             @loadDatabase.each do |e|
               @falsePositiveFingerprints << e.fingerprint
             end
-            puts @falsePositiveFingerprints
           end
 
           def report_findings(finding_count, repo, progress)

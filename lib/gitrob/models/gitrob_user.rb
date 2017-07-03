@@ -10,14 +10,6 @@ module Gitrob
         validates_presence [:username, :password_digest]
       end
 
-      # def authenticate(attempted_password)
-      #   if self.password_digest == attempted_password
-      #     true
-      #   else
-      #     false
-      #   end
-      # end
-
       if GitrobUser.count == 0
         @user = GitrobUser.new
         @user.username = "admin"
