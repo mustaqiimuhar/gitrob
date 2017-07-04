@@ -145,7 +145,7 @@ module Gitrob
       #Zendesk - Create new Gitrob User
       def prepare_user
         @gitrobUser = Gitrob::Models::GitrobUser.all
-        if @gitrobUser.count > 0
+        if @gitrobUser.count == 0
           username = "gitrob"
           random_string = SecureRandom.base64(75)
           puts "\033[0;31m"
