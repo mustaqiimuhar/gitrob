@@ -52,6 +52,7 @@ module Gitrob
       configure unless configured?
       load_configuration
       prepare_database
+      prepare_user
     end
 
     desc "analyze TARGETS", "Analyze one or more organizations or users"
@@ -141,6 +142,24 @@ module Gitrob
         end
       end
 
+      #Zendesk - Create new Gitrob User
+      def prepare_user
+        @gitrobUser = Gitrob::Models::GitrobUser.all
+        if @gitrobUser.count == 0
+          puts "\033[0;31m"
+          puts "============================"
+          puts "Creating new User for Gitrob"
+          puts "Username: " + configuration["gitrob_username"]
+          puts "Password: " + configuration["gitrob_password"]
+          puts "============================"
+          puts "\e[0"
+          @user = Gitrob::Models::GitrobUser.new
+          @user.username = configuration["gitrob_username"]
+          @user.password = configuration["gitrob_password"]
+          @user.save       
+        end
+      end
+
       def load_models
         require "gitrob/models/assessment"
         require "gitrob/models/github_access_token"
@@ -150,6 +169,7 @@ module Gitrob
         require "gitrob/models/flag"
         require "gitrob/models/comparison"
         require "gitrob/models/fingerprint"
+        require "gitrob/models/gitrob_user"
       end
     end
 
