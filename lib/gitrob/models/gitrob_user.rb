@@ -9,14 +9,6 @@ module Gitrob
         super
         validates_presence [:username, :password_digest]
       end
-
-      if GitrobUser.count == 0
-        @user = GitrobUser.new
-        @user.username = "admin"
-        @user.password = "admin"
-        @user.save
-      end
-
     end
   end
 end
