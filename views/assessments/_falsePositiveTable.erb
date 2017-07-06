@@ -1,15 +1,22 @@
-<table class="table table-hover table-striped table-condensed falsePositive the-table" id="falsePositive_table" data-refresh-endpoint="/falsePositives/_table">
+<table class="table table-striped table-hover table-condensed falsePositive" id="falsePositive_table" data-refresh-endpoint="/falsePositives/_table">
   <thead>
     <tr>
-      <th style="width:20%">Repository</th>
-      <th style="width:30%">Path</th>
-      <th style="width:46%">Fingerprint</th>
-      <th></th>
+    <th colspan="4">
+      <div class="pull-right">
+        <input type="text" id="quick_filter" class="form-control input-sm quick-filter" placeholder="Quick filter...">
+      </div>
+    </th>
     </tr>
   </thead>
   <tbody>
+    <tr>
+      <th>Repository</th>
+      <th>Path</th>      
+      <th>Fingerprint</th>
+      <th></th>
+    </tr>
     <% @falsePositive.each do |fp| %>
-      <tr>
+      <tr class="blob-row">
         <td class="word-wrap"><%=fp.repository%></td>
         <td class="word-wrap"><%=fp.path%></td>      
         <td class="word-wrap"><%=fp.fingerprint%></td>

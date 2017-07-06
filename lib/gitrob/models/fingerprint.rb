@@ -1,4 +1,4 @@
-#Zendesk - FalsePositive Model
+#FalsePositive Model
 module Gitrob
   module Models
     class FalsePositive < Sequel::Model
@@ -8,7 +8,7 @@ module Gitrob
       
       def validate
         super
-        validates_unique(:fingerprint, :path, :repository)
+        validates_unique(:fingerprint)
         validates_presence [:fingerprint, :path, :repository]
         validates_format SHA_REGEX, :fingerprint
       end

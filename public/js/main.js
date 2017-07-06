@@ -17,23 +17,10 @@ $(document).ready(function() {
     }, 5000)
   }
 
-  // Zendesk - initialize False Positive Container
+  //Initialize False Positive Container
   if ($("#falsePositive_table_container").length === 1) {
     initializeFalsePositiveTableEvents();
-    setTimeout(function() {
-      refreshFalsePositiveTable();
-    }, 5000)
   }
-
-  $("#new_assessment_button").on("click", function(e) {
-    e.preventDefault();
-
-    $("#assessment_targets").val("");
-    $("#new_assessment_modal").modal({
-      show: true
-    });
-    return false;
-  });
 
   $("#new_assessment_modal").on('shown.bs.modal', function (e) {
     $("#assessment_targets").focus();
@@ -51,15 +38,31 @@ $(document).ready(function() {
     return false;
   });
 
-  // Zendesk - add new false positive submit button event
+  //Add new false positive submit button event
   $("#new_falsePositive_form").on("submit", function (e) {
     e.preventDefault();
     $.ajax({
       url: "/falsePositive",
       type: "POST",
-      data: $(this).serialize()
+      data: $(this).serialize(),
+      success: function(data) {
+        refreshFalsePositiveTable();
+      }
     });
-    refreshFalsePositiveTable();
+    return false;
+  });
+
+  //Login form jquery POST
+  $("#new_login_form").on("submit", function (e) {
+    e.preventDefault();
+    $.ajax({
+      url: "/auth/login",
+      type: "POST",
+      data: $(this).serialize(),
+      success: function(data) {
+        window.location = "/";
+      }
+    });
     return false;
   });
 
@@ -187,16 +190,13 @@ function refreshComparisonsTable() {
   }
 }
 
-// Zendesk - refresh table every 5ms
+//Function to refresh False Positive table
 function refreshFalsePositiveTable() {
   var refreshEndpoint = $("#falsePositive_table_container").attr("data-refresh-endpoint");
   if (typeof refreshEndpoint !== typeof undefined && refreshEndpoint !== false) {
     $.get(refreshEndpoint, function(result) {
       $("#falsePositive_table_container").html(result);
       initializeFalsePositiveTableEvents();
-      setTimeout(function() {
-        refreshFalsePositiveTable();
-      }, 5000)
     });
   }
 }
@@ -240,7 +240,7 @@ function initializeAssessmentsTableEvents() {
   });
 }
 
-// Zendesk - Initialize the false positive table to allow delete button to work
+//Initialize the false positive table to allow delete button to work
 function initializeFalsePositiveTableEvents() {
   $("table.falsePositive").on("click", ".delete-fingerprint", function(e) {
     e.preventDefault();
