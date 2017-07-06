@@ -16,14 +16,14 @@
       <th></th>
     </tr>
     <% @falsePositive.each do |fp| %>
-        <tr class="blob-row">
-          <td class="word-wrap"><%=fp.repository%></td>
-          <td class="word-wrap"><%=fp.path%></td>      
-          <td class="word-wrap"><%=fp.fingerprint%></td>
-          <td>
-            <a class="btn btn-default btn-xs glyphicon glyphicon-trash delete-fingerprint" title="Delete fingerprint" data-toggle="tooltip" data-placement="bottom" href="#" data-assessment-id="<%=h fp.id%>"></a>
-          </td>
-        </tr>
+      <tr class="blob-row">
+        <td class="word-wrap"><%=fp.repository%></td>
+        <td class="word-wrap"><%=fp.path%></td>      
+        <td class="word-wrap"><%=fp.fingerprint%></td>
+        <td>
+          <a class="btn btn-default btn-xs glyphicon glyphicon-trash delete-fingerprint" title="Delete fingerprint" data-toggle="tooltip" data-placement="bottom" href="#" data-assessment-id="<%=h fp.id%>"></a>
+        </td>
+      </tr>
     <% end %>
   </tbody>
 </table>
