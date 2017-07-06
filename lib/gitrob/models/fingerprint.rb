@@ -8,7 +8,7 @@ module Gitrob
       
       def validate
         super
-        validates_unique(:fingerprint, :path, :repository)
+        validates_unique(:fingerprint)
         validates_presence [:fingerprint, :path, :repository]
         validates_format SHA_REGEX, :fingerprint
       end

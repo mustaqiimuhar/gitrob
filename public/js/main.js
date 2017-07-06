@@ -20,9 +20,6 @@ $(document).ready(function() {
   //Initialize False Positive Container
   if ($("#falsePositive_table_container").length === 1) {
     initializeFalsePositiveTableEvents();
-    setTimeout(function() {
-      refreshFalsePositiveTable();
-    }, 5000)
   }
 
   $("#new_assessment_button").on("click", function(e) {
@@ -57,9 +54,12 @@ $(document).ready(function() {
     $.ajax({
       url: "/falsePositive",
       type: "POST",
-      data: $(this).serialize()
+      data: $(this).serialize(),
+      success: function(data) {
+        refreshFalsePositiveTable();
+      }
     });
-    refreshFalsePositiveTable();
+    // refreshFalsePositiveTable();
     return false;
   });
 
@@ -194,9 +194,6 @@ function refreshFalsePositiveTable() {
     $.get(refreshEndpoint, function(result) {
       $("#falsePositive_table_container").html(result);
       initializeFalsePositiveTableEvents();
-      setTimeout(function() {
-        refreshFalsePositiveTable();
-      }, 5000)
     });
   }
 }
