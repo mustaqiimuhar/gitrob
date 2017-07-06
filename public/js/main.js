@@ -22,16 +22,6 @@ $(document).ready(function() {
     initializeFalsePositiveTableEvents();
   }
 
-  $("#new_assessment_button").on("click", function(e) {
-    e.preventDefault();
-
-    $("#assessment_targets").val("");
-    $("#new_assessment_modal").modal({
-      show: true
-    });
-    return false;
-  });
-
   $("#new_assessment_modal").on('shown.bs.modal', function (e) {
     $("#assessment_targets").focus();
   });
@@ -59,10 +49,10 @@ $(document).ready(function() {
         refreshFalsePositiveTable();
       }
     });
-    // refreshFalsePositiveTable();
     return false;
   });
 
+  //Login form jquery POST
   $("#new_login_form").on("submit", function (e) {
     e.preventDefault();
     $.ajax({
@@ -187,7 +177,7 @@ function refreshComparisonsTable() {
   }
 }
 
-// Refresh table every 5ms
+//Function to refresh False Positive table
 function refreshFalsePositiveTable() {
   var refreshEndpoint = $("#falsePositive_table_container").attr("data-refresh-endpoint");
   if (typeof refreshEndpoint !== typeof undefined && refreshEndpoint !== false) {
