@@ -223,9 +223,15 @@ module Gitrob
 
     get "/assessments/:id/findings" do
       env['warden'].authenticate!
+      @falsePositive = Gitrob::Models::FalsePositive.select{fingerprint}.all
+      fingerprint = []
+      @falsePositive.each do |f|
+        fingerprint.push(f.fingerprint)
+      end
       @assessment = find_assessment(params[:id])
       @findings = @assessment.blobs_dataset.where("flags_count != 0")
-        .order(:path).eager(:repository, :flags).all
+        .exclude(:sha256 => fingerprint)
+        .order(:path).eager(:repository, :flags).all 
       erb :"assessments/findings"
     end
 
