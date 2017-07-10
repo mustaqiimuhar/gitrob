@@ -47,25 +47,22 @@ $(document).ready(function() {
       data: $(this).serialize(),
       success: function(data) {
         refreshFalsePositiveTable();
+      },
+      error: function(err) {
+        var msg = err.responseJSON.message;
+        if (~msg.indexOf("already taken")){
+          alert("Fingerprint already added");
+        } else if (~msg.indexOf("fingerprint is invalid")){
+          alert("Fingerprint format is invalid")
+        } else {
+          alert("Fill in all required fields.")
+        }
       }
     });
     return false;
   });
 
   //Login form jquery POST
-  $("#new_login_form").on("submit", function (e) {
-    e.preventDefault();
-    $.ajax({
-      url: "/auth/login",
-      type: "POST",
-      data: $(this).serialize(),
-      success: function(data) {
-        window.location = "/";
-      }
-    });
-    return false;
-  });
-
   $("#new_login_form").on("submit", function (e) {
     e.preventDefault();
     $.ajax({
