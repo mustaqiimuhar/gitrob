@@ -305,6 +305,16 @@ module Gitrob
       @falsePositive.destroy
     end
 
+    #Edit false positive comment
+    post "/false_positive/:id" do
+      env['warden'].authenticate!
+      @falsePositive = Gitrob::Models::FalsePositive.first(
+        :id => params[:id].to_i,
+      ) || halt(404)
+      @falsePositive.update(:comment => params[:falsePositive][:comment])
+      @falsePositive.save
+    end
+
     #Add new false positive fingerprints
     post "/falsePositive" do
       env['warden'].authenticate!

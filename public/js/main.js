@@ -85,6 +85,21 @@ $(document).ready(function() {
     return false;
   });
 
+  //Edit false positive submit button event
+  $("#new_editFalsePositive_form").on("submit", function (e) {
+    e.preventDefault();
+    $.ajax({
+      url: "/false_positive/" + $("#edit_falsepositive").attr("data-assessment-id"),
+      type: "POST",
+      data: $(this).serialize(),
+      success: function(data) {
+        $("#new_editFalsePositive_modal").modal("hide");
+        refreshFalsePositiveTable();
+      }
+    });
+    return false;
+  });
+
   $("#new_falsePositive_modal").on('shown.bs.modal', function (e) {
     $("#repository").focus();
   });
@@ -92,7 +107,6 @@ $(document).ready(function() {
   $("#new_falsePositive_button").on("click", function(e) {
     e.preventDefault();
 
-    $("#assessment_targets").val("");
     $("#new_falsePositive_modal").modal({
       show: true
     });
@@ -289,6 +303,20 @@ function initializeFalsePositiveTableEvents() {
         $(this).remove();
       });
     }
+    return false;
+  });
+
+  $("#new_editFalsePositive_modal").on('shown.bs.modal', function (e) {
+    $("#comment").focus();
+  });
+
+  $("table.falsePositive").on("click", ".edit-fingerprint", function(e) {
+    e.preventDefault();
+
+    $("#edit_falsepositive").attr("data-assessment-id", $(this).attr("data-assessment-id"));
+    $("#new_editFalsePositive_modal").modal({
+      show: true
+    });
     return false;
   });
 }
