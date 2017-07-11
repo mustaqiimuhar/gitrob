@@ -420,6 +420,15 @@ module Gitrob
       erb :"errors/not_found"
     end
 
+    error Sequel::Error do
+      e = env['sinatra.error']
+      content_type :JSON
+      status(400)
+      return {
+        message: e.message
+      }.to_json
+    end
+
     error do
       status 500
       @error = env["sinatra.error"]
