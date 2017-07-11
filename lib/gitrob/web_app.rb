@@ -312,6 +312,7 @@ module Gitrob
       @fingerprint.fingerprint = params[:falsePositive][:fingerprint]
       @fingerprint.path = params[:falsePositive][:path]
       @fingerprint.repository = params[:falsePositive][:repository]
+      @fingerprint.comment = params[:falsePositive][:comment]
       @fingerprint.save
     end
 
