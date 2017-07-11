@@ -20,11 +20,19 @@ $(document).ready(function() {
   //Initialize False Positive Container
   if ($("#falsePositive_table_container").length === 1) {
     initializeFalsePositiveTableEvents();
-  }
 
-  $("#new_assessment_modal").on('shown.bs.modal', function (e) {
-    $("#assessment_targets").focus();
-  });
+    //Zendesk - Check if form pre-filled to auto open the form
+    var formFilled = false;
+    $('#new_falsePositive_form input').each(function() {
+      if ($(this).val() != '') {
+        formFilled = true;
+      }
+    });
+    if (formFilled)
+      $("#new_falsePositive_modal").modal({
+      show: true
+     });
+  }
 
   $("#new_assessment_form").on("submit", function(e) {
     e.preventDefault();
@@ -38,6 +46,20 @@ $(document).ready(function() {
     return false;
   });
 
+  $("#new_assessment_modal").on('shown.bs.modal', function (e) {
+    $("#assessment_targets").focus();
+  });
+
+  $("#new_assessment_button").on("click", function(e) {
+    e.preventDefault();
+
+    $("#repository").val("");
+    $("#new_assessment_modal").modal({
+      show: true
+    });
+    return false;
+  });
+
   //Add new false positive submit button event
   $("#new_falsePositive_form").on("submit", function (e) {
     e.preventDefault();
@@ -46,6 +68,7 @@ $(document).ready(function() {
       type: "POST",
       data: $(this).serialize(),
       success: function(data) {
+        $("#new_falsePositive_modal").modal("hide");
         refreshFalsePositiveTable();
       },
       error: function(err) {
@@ -58,6 +81,20 @@ $(document).ready(function() {
           alert("Fill in all required fields.")
         }
       }
+    });
+    return false;
+  });
+
+  $("#new_falsePositive_modal").on('shown.bs.modal', function (e) {
+    $("#repository").focus();
+  });
+
+  $("#new_falsePositive_button").on("click", function(e) {
+    e.preventDefault();
+
+    $("#assessment_targets").val("");
+    $("#new_falsePositive_modal").modal({
+      show: true
     });
     return false;
   });
