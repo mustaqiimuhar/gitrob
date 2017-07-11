@@ -1,7 +1,7 @@
 <table class="table the-table table-striped table-hover table-condensed falsePositive" id="falsePositive_table" data-refresh-endpoint="/falsePositives/_table">
   <thead>
     <tr>
-    <th colspan="4">
+    <th colspan="5">
       <div class="pull-right">
         <input type="text" id="quick_filter" class="form-control input-sm quick-filter" placeholder="Quick filter...">
       </div>
@@ -13,13 +13,15 @@
       <th>Repository</th>
       <th>Path</th>      
       <th>Fingerprint</th>
+      <th>Comment</th>
       <th></th>
     </tr>
     <% @falsePositive.each do |fp| %>
       <tr class="blob-row">
-        <td class="word-wrap"><%=fp.repository%></td>
-        <td class="word-wrap"><%=fp.path%></td>      
-        <td><%=fp.fingerprint%></td>
+        <td><%=fp.repository%></td>
+        <td><%=fp.path%></td>      
+        <td><%=fp.fingerprint[0,6]%>...<%=fp.fingerprint[58,64]%></td>
+        <td><%=fp.comment%></td>
         <td class="blob-size">
           <a class="btn btn-default btn-xs glyphicon glyphicon-trash delete-fingerprint" title="Delete fingerprint" data-toggle="tooltip" data-placement="bottom" href="#" data-assessment-id="<%=h fp.id%>"></a>
         </td>

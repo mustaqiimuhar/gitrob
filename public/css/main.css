@@ -32,11 +32,15 @@ footer a {
 }
 
 .the-table {
-    table-layout: fixed;
+  table-layout: fixed;
 }
 
 .word-wrap {
-    word-wrap: break-word;
+  word-wrap: break-word;
+}
+
+table.falsePositive {
+  table-layout: auto;
 }
 
 table.assessments td, table.comparisons td {

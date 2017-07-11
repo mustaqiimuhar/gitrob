@@ -5,6 +5,7 @@ Sequel.migration do
       String :repository, :size => 100
       String :path, :size => 100 
       String :fingerprint, :size => 65, :fixed => true, :index => true
+      String :comment
     end
   end
 end
