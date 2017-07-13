@@ -1,6 +1,5 @@
 require "sinatra/base"
-require "warden"
-require 'sinatra/flash'
+require "sinatra/flash"
 
 module Gitrob
   class WebApp < Sinatra::Base
@@ -21,6 +20,7 @@ module Gitrob
     # Warden configuration code
     enable :sessions
     register Sinatra::Flash
+    register WillPaginate::Sinatra
 
     helpers do
       HUMAN_PREFIXES = %w(TB GB MB KB B).freeze
@@ -231,7 +231,8 @@ module Gitrob
       @assessment = find_assessment(params[:id])
       @findings = @assessment.blobs_dataset.where("flags_count != 0")
         .exclude(:sha256 => fingerprint)
-        .order(:path).eager(:repository, :flags).all 
+        .order(:path).eager(:repository, :flags).all
+      @paginatedFindings = @findings.paginate(:page => params[:page], :per_page => 25) 
       erb :"assessments/findings"
     end
 
@@ -266,7 +267,7 @@ module Gitrob
     get "/assessments/:id/false_positives" do
       env['warden'].authenticate!
       @assessment = find_assessment(params[:id])
-      @falsePositive = Gitrob::Models::FalsePositive.order(:repository)
+      @falsePositive = Gitrob::Models::FalsePositive.order(:repository).all
       erb :"assessments/false_positive"
     end
 
@@ -285,7 +286,7 @@ module Gitrob
       @repository.each do |r|
         @repo_name = r.full_name  
       end
-      @falsePositive = Gitrob::Models::FalsePositive.order(:repository)
+      @falsePositive = Gitrob::Models::FalsePositive.order(:repository).all
       erb :"assessments/false_positive"
     end
 

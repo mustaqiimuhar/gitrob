@@ -12,6 +12,12 @@ require "sequel"
 require "ruby-progressbar"
 require "sucker_punch"
 require "securerandom"
+require "warden"
+require "will_paginate"
+require "will_paginate/sequel"
+require "will_paginate/array"
+require "will_paginate/view_helpers/sinatra"
+
 
 require "gitrob/version"
 require "gitrob/utils"

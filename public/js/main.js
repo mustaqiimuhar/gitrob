@@ -95,6 +95,16 @@ $(document).ready(function() {
       success: function(data) {
         $("#new_editFalsePositive_modal").modal("hide");
         refreshFalsePositiveTable();
+      },
+      error: function(err) {
+        var msg = err.responseJSON.message;
+        if (~msg.indexOf("not present")){
+          alert("Fill in all required fields.");
+        } else if (~msg.indexOf("PG::StringDataRightTruncation:")){
+          alert("Comment is too long.")
+        } else {
+          alert("Fill in all required fields.")
+        }
       }
     });
     return false;
